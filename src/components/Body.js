@@ -1,11 +1,9 @@
 import RestroCard, { isNewlyOnboarded } from "./RestroCard";
-import { useState, useEffect, useContext } from "react";
-import ShimmerUI from "./ShimmerUI";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import useShowOnlineStatus from "../utils/useShowOnlineStatus";
 import UserContext from "../utils/UserContext";
 import myNameContext from "../utils/myNameContext";
-import { RESTAURANT_API_URL } from "../utils/constant";
 
 const fallbackRestaurants = [
   {
@@ -45,70 +43,16 @@ const fallbackRestaurants = [
   },
 ];
 
-const findRestaurants = (value) => {
-  if (!value || typeof value !== "object") return null;
-
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const restaurants = findRestaurants(item);
-      if (restaurants?.length) return restaurants;
-    }
-    return null;
-  }
-
-  const restaurants = value?.gridElements?.infoWithStyle?.restaurants;
-  if (Array.isArray(restaurants) && restaurants.length) return restaurants;
-
-  for (const child of Object.values(value)) {
-    const nestedRestaurants = findRestaurants(child);
-    if (nestedRestaurants?.length) return nestedRestaurants;
-  }
-
-  return null;
-};
-
 const Body = () => {
-  // listOfRestaurants to get all the restro from Api call
-  const [listOfRestaurants, setListOfRestaurants] =
-    useState(fallbackRestaurants);
+  const [listOfRestaurants, setListOfRestaurants] = useState(fallbackRestaurants);
 
-  // filteredRestro will have initially all restro but later contains filtered restros
-  const [filteredRestro, setFilteredRestro] = useState(fallbackRestaurants);
-  const [hasApiError, setHasApiError] = useState(false);
+  const [filteredRestro, setFilteredRestro] =
+    useState(fallbackRestaurants);
 
   const [searchText, setSearchText] = useState("");
   console.log("list of restros", listOfRestaurants);
 
   const OpenRestaurant = isNewlyOnboarded(RestroCard);
-
-  // useEffect will be rendered after entire component rendering is completed.
-  useEffect(() => {
-    if (RESTAURANT_API_URL) apiData();
-  }, []);
-
-  // first render
-  // console.log("rendered component");
-
-  const apiData = async () => {
-    try {
-      const data = await fetch(RESTAURANT_API_URL);
-      if (!data.ok) throw new Error(`Restaurant API returned ${data.status}`);
-
-      const jsonData = await data.json();
-      const restaurants = findRestaurants(jsonData?.data);
-
-      if (!restaurants?.length)
-        throw new Error("Restaurant data is unavailable");
-
-      setListOfRestaurants(restaurants);
-      setFilteredRestro(restaurants);
-    } catch (error) {
-      console.error("Unable to load live restaurants:", error);
-      setHasApiError(true);
-      setListOfRestaurants(fallbackRestaurants);
-      setFilteredRestro(fallbackRestaurants);
-    }
-  };
 
   const onlineStatus = useShowOnlineStatus();
 
@@ -119,16 +63,8 @@ const Body = () => {
   if (onlineStatus === false)
     return <h1>You are offline !! Please check your internet connection...</h1>;
 
-  return listOfRestaurants.length === 0 ? (
-    <ShimmerUI />
-  ) : (
+  return (
     <div className="">
-      {hasApiError && (
-        <p className="m-4 rounded bg-yellow-100 p-3 text-yellow-900">
-          Live restaurant data is unavailable, so QuickBite is showing sample
-          restaurants.
-        </p>
-      )}
       <input
         type="text"
         className="border border-black m-4 px-2 py-1 rounded-md"

@@ -4,10 +4,3 @@ export const CDN_URL =
 export const LOGO_URL =
   "https://static.vecteezy.com/system/resources/thumbnails/008/687/818/small/food-delivery-logo-free-vector.jpg";
 
-export const MENU_URL =
-  "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=21.1458004&lng=79.0881546&restaurantId=";
-
-export const RESTAURANT_API_URL = process.env.RESTAURANT_API_URL || null;
-
-export const RESTRO_URL =
-  "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=21.1458004&lng=79.0881546&carousel=true&third_party_vendor=1";

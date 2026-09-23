@@ -7,8 +7,10 @@ class UserClass extends React.Component {
 
     this.state = {
       userData: {
-        name: "Dummy",
-        location: "default",
+        name: "Aniket Jhade",
+        id: "QuickBite learner",
+        avatar_url:
+          "https://static.vecteezy.com/system/resources/thumbnails/008/687/818/small/food-delivery-logo-free-vector.jpg",
       },
     };
 
@@ -16,18 +18,8 @@ class UserClass extends React.Component {
     console.log(this.props.name + " " + "Constructor is called");
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     console.log(this.props.name + " " + "child did mount");
-
-    const data = await fetch("https://api.github.com/users/aniketjhade");
-
-    const jsonData = await data.json();
-
-    console.log(jsonData);
-
-    this.setState({
-      userData: jsonData,
-    });
   }
 
   componentDidUpdate() {
