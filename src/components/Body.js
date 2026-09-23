@@ -11,37 +11,36 @@ const fallbackRestaurants = [
   {
     info: {
       id: "quickbite-pizza",
-      name: "The Pizza Kitchen",
-      cuisines: ["Pizzas", "Italian"],
+      name: "Airport Centre Point - Sadar",
+      cloudinaryImageId: "59042b47c295996dfa300193e93493c9",
+      cuisines: ["North Indian", "Biryani", "Chinese", "Tandoor"],
       avgRating: 4.5,
-      costForTwo: "Rs. 400 for two",
-      imageUrl:
-        "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80",
-      sla: { deliveryTime: 30 },
+      costForTwo: "Rs. 300 for two",
+      sla: { deliveryTime: 39 },
     },
   },
   {
     info: {
       id: "quickbite-bowl",
-      name: "Green Bowl Co.",
-      cuisines: ["Healthy Food", "Salads"],
-      avgRating: 4.3,
-      costForTwo: "Rs. 350 for two",
-      imageUrl:
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
-      sla: { deliveryTime: 25 },
+      name: "Olio - The Wood Fired Pizzeria",
+      cloudinaryImageId:
+        "RX_THUMBNAIL/IMAGES/VENDOR/2025/12/24/af4c5491-786a-4458-9021-e2746af8642f_739172.JPG",
+      cuisines: ["Pizzas", "Pastas", "Italian", "Fast Food"],
+      avgRating: 3.9,
+      costForTwo: "Rs. 300 for two",
+      sla: { deliveryTime: 30 },
     },
   },
   {
     info: {
       id: "quickbite-burger",
-      name: "Burger Junction",
-      cuisines: ["Burgers", "American"],
-      avgRating: 4.2,
-      costForTwo: "Rs. 300 for two",
-      imageUrl:
-        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
-      sla: { deliveryTime: 20 },
+      name: "Subway",
+      cloudinaryImageId:
+        "RX_THUMBNAIL/IMAGES/VENDOR/2025/6/12/af4a4c50-d6f4-4153-97a7-5bbd9e0b8fc4_695493.jpg",
+      cuisines: ["Sandwich", "Salads", "Wrap", "Healthy Food"],
+      avgRating: 4.1,
+      costForTwo: "Rs. 400 for two",
+      sla: { deliveryTime: 23 },
     },
   },
 ];
@@ -70,10 +69,11 @@ const findRestaurants = (value) => {
 
 const Body = () => {
   // listOfRestaurants to get all the restro from Api call
-  const [listOfRestaurants, setListOfRestaurants] = useState([]);
+  const [listOfRestaurants, setListOfRestaurants] =
+    useState(fallbackRestaurants);
 
   // filteredRestro will have initially all restro but later contains filtered restros
-  const [filteredRestro, setFilteredRestro] = useState([]);
+  const [filteredRestro, setFilteredRestro] = useState(fallbackRestaurants);
   const [hasApiError, setHasApiError] = useState(false);
 
   const [searchText, setSearchText] = useState("");
@@ -83,7 +83,7 @@ const Body = () => {
 
   // useEffect will be rendered after entire component rendering is completed.
   useEffect(() => {
-    apiData();
+    if (RESTAURANT_API_URL) apiData();
   }, []);
 
   // first render
@@ -91,9 +91,7 @@ const Body = () => {
 
   const apiData = async () => {
     try {
-      const data = await fetch(
-        RESTAURANT_API_URL,
-      );
+      const data = await fetch(RESTAURANT_API_URL);
       if (!data.ok) throw new Error(`Restaurant API returned ${data.status}`);
 
       const jsonData = await data.json();

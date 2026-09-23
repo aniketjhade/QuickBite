@@ -7,9 +7,7 @@ export const LOGO_URL =
 export const MENU_URL =
   "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=21.1458004&lng=79.0881546&restaurantId=";
 
-export const RESTAURANT_API_URL =
-  process.env.RESTAURANT_API_URL ||
-  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.1458004&lng=79.0881546&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
+export const RESTAURANT_API_URL = process.env.RESTAURANT_API_URL || null;
 
 export const RESTRO_URL =
   "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=21.1458004&lng=79.0881546&carousel=true&third_party_vendor=1";
