@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { CDN_URL } from "../utils/constant";
-import { addItem } from "../utils/cartSlice";
+import { addItem, removeItem } from "../utils/cartSlice";
 
 const ItemList = ({ items }) => {
   // Dispatch an action to the slice of redux
@@ -9,6 +9,10 @@ const ItemList = ({ items }) => {
 
   const handleAddItem = (item) => {
     dispatch(addItem(item));
+  };
+
+  const handleRemoveItem = (item) => {
+    dispatch(removeItem(item));
   };
 
   return (
@@ -34,7 +38,20 @@ const ItemList = ({ items }) => {
           </div>
           <div className="w-3/12 mb-2 ">
             <div className="absolute text-green-700 font-bold bg-white rounded-md px-2 py-1 mt-36 ml-14 shadow-lg">
-              <button onClick={() => handleAddItem(item)}>Add +</button>
+              <button
+                aria-label={`Remove ${item.card?.info?.name}`}
+                className="px-2"
+                onClick={() => handleRemoveItem(item)}
+              >
+                -
+              </button>
+              <button
+                aria-label={`Add ${item.card?.info?.name}`}
+                className="px-2"
+                onClick={() => handleAddItem(item)}
+              >
+                +
+              </button>
             </div>
             <img
               className="rounded-xl"

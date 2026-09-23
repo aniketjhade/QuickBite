@@ -10,7 +10,11 @@ const cartSlice = createSlice({
       state.items.push(action.payload);
     },
     removeItem: (state, action) => {
-      state.items.pop();
+      const itemIndex = state.items.findIndex(
+        (item) => item.card?.info?.id === action.payload.card?.info?.id,
+      );
+
+      if (itemIndex !== -1) state.items.splice(itemIndex, 1);
     },
     clearCart: (state) => {
       state.items.length = 0;
