@@ -161,6 +161,16 @@ const findRestaurants = (value) => {
   return null;
 };
 
+const mergeRestaurants = (liveRestaurants) => {
+  const seenNames = new Set();
+  return [...liveRestaurants, ...fallbackRestaurants].filter((restaurant) => {
+    const name = restaurant?.info?.name?.toLowerCase();
+    if (!name || seenNames.has(name)) return false;
+    seenNames.add(name);
+    return true;
+  });
+};
+
 const Body = () => {
   const [listOfRestaurants, setListOfRestaurants] =
     useState(fallbackRestaurants);
@@ -184,8 +194,9 @@ const Body = () => {
         if (!restaurants?.length)
           throw new Error("Restaurant data is unavailable");
 
-        setListOfRestaurants(restaurants);
-        setFilteredRestro(restaurants);
+        const combinedRestaurants = mergeRestaurants(restaurants);
+        setListOfRestaurants(combinedRestaurants);
+        setFilteredRestro(combinedRestaurants);
       } catch (error) {
         console.warn("Live restaurants unavailable; using local data.", error);
       }
