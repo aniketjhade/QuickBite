@@ -1,9 +1,10 @@
 import RestroCard, { isNewlyOnboarded } from "./RestroCard";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import useShowOnlineStatus from "../utils/useShowOnlineStatus";
 import UserContext from "../utils/UserContext";
 import myNameContext from "../utils/myNameContext";
+import { RESTAURANT_API_URL } from "../utils/constant";
 
 const fallbackRestaurants = [
   {
@@ -43,16 +44,57 @@ const fallbackRestaurants = [
   },
 ];
 
-const Body = () => {
-  const [listOfRestaurants, setListOfRestaurants] = useState(fallbackRestaurants);
+const findRestaurants = (value) => {
+  if (!value || typeof value !== "object") return null;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const restaurants = findRestaurants(item);
+      if (restaurants?.length) return restaurants;
+    }
+    return null;
+  }
 
-  const [filteredRestro, setFilteredRestro] =
+  const restaurants = value?.gridElements?.infoWithStyle?.restaurants;
+  if (Array.isArray(restaurants) && restaurants.length) return restaurants;
+
+  for (const child of Object.values(value)) {
+    const nestedRestaurants = findRestaurants(child);
+    if (nestedRestaurants?.length) return nestedRestaurants;
+  }
+
+  return null;
+};
+
+const Body = () => {
+  const [listOfRestaurants, setListOfRestaurants] =
     useState(fallbackRestaurants);
+
+  const [filteredRestro, setFilteredRestro] = useState(fallbackRestaurants);
 
   const [searchText, setSearchText] = useState("");
   console.log("list of restros", listOfRestaurants);
 
   const OpenRestaurant = isNewlyOnboarded(RestroCard);
+
+  useEffect(() => {
+    const loadLiveRestaurants = async () => {
+      try {
+        const response = await fetch(RESTAURANT_API_URL);
+        if (!response.ok) throw new Error(`Restaurant API returned ${response.status}`);
+
+        const jsonData = await response.json();
+        const restaurants = findRestaurants(jsonData?.data);
+        if (!restaurants?.length) throw new Error("Restaurant data is unavailable");
+
+        setListOfRestaurants(restaurants);
+        setFilteredRestro(restaurants);
+      } catch (error) {
+        console.warn("Live restaurants unavailable; using local data.", error);
+      }
+    };
+
+    loadLiveRestaurants();
+  }, []);
 
   const onlineStatus = useShowOnlineStatus();
 
