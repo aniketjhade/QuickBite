@@ -3,7 +3,7 @@ import { CDN_URL } from "../utils/constant";
 const RestroCard = (props) => {
   const { resData } = props;
 
-  const { cloudinaryImageId, name, cuisines, avgRating, costForTwo } =
+  const { cloudinaryImageId, imageUrl, name, cuisines, avgRating, costForTwo } =
     resData?.info;
 
   const { deliveryTime } = resData?.info?.sla;
@@ -14,7 +14,7 @@ const RestroCard = (props) => {
         <img
           alt="image"
           className="h-48 w-full rounded-xl "
-          src={CDN_URL + cloudinaryImageId}
+          src={imageUrl || CDN_URL + cloudinaryImageId}
         />
         <h3 className="font-bold text-xl m-1 py-1">{name}</h3>
         <h5 className=" m-1">{cuisines.join(", ")}</h5>

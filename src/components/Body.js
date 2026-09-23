@@ -6,12 +6,52 @@ import useShowOnlineStatus from "../utils/useShowOnlineStatus";
 import UserContext from "../utils/UserContext";
 import myNameContext from "../utils/myNameContext";
 
+const fallbackRestaurants = [
+  {
+    info: {
+      id: "quickbite-pizza",
+      name: "The Pizza Kitchen",
+      cuisines: ["Pizzas", "Italian"],
+      avgRating: 4.5,
+      costForTwo: "Rs. 400 for two",
+      imageUrl:
+        "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80",
+      sla: { deliveryTime: 30 },
+    },
+  },
+  {
+    info: {
+      id: "quickbite-bowl",
+      name: "Green Bowl Co.",
+      cuisines: ["Healthy Food", "Salads"],
+      avgRating: 4.3,
+      costForTwo: "Rs. 350 for two",
+      imageUrl:
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+      sla: { deliveryTime: 25 },
+    },
+  },
+  {
+    info: {
+      id: "quickbite-burger",
+      name: "Burger Junction",
+      cuisines: ["Burgers", "American"],
+      avgRating: 4.2,
+      costForTwo: "Rs. 300 for two",
+      imageUrl:
+        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+      sla: { deliveryTime: 20 },
+    },
+  },
+];
+
 const Body = () => {
   // listOfRestaurants to get all the restro from Api call
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
 
   // filteredRestro will have initially all restro but later contains filtered restros
   const [filteredRestro, setFilteredRestro] = useState([]);
+  const [hasApiError, setHasApiError] = useState(false);
 
   const [searchText, setSearchText] = useState("");
   console.log("list of restros", listOfRestaurants);
@@ -27,22 +67,27 @@ const Body = () => {
   // console.log("rendered component");
 
   const apiData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.1458004&lng=79.0881546&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING "
-    );
-    const jsonData = await data.json();
+    try {
+      const data = await fetch(
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.1458004&lng=79.0881546&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
+      );
+      if (!data.ok) throw new Error(`Restaurant API returned ${data.status}`);
 
-    // whenever state variable updates React will trigger the reconciliation cycle i.e re-renders the component
-    // second render after an API call
-    setListOfRestaurants(
-      jsonData?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
+      const jsonData = await data.json();
+      const restaurants =
+        jsonData?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
 
-    setFilteredRestro(
-      jsonData?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
+      if (!restaurants?.length) throw new Error("Restaurant data is unavailable");
+
+      setListOfRestaurants(restaurants);
+      setFilteredRestro(restaurants);
+    } catch (error) {
+      console.error("Unable to load live restaurants:", error);
+      setHasApiError(true);
+      setListOfRestaurants(fallbackRestaurants);
+      setFilteredRestro(fallbackRestaurants);
+    }
   };
 
   const onlineStatus = useShowOnlineStatus();
@@ -58,6 +103,11 @@ const Body = () => {
     <ShimmerUI />
   ) : (
     <div className="">
+      {hasApiError && (
+        <p className="m-4 rounded bg-yellow-100 p-3 text-yellow-900">
+          Live restaurant data is unavailable, so QuickBite is showing sample restaurants.
+        </p>
+      )}
       <input
         type="text"
         className="border border-black m-4 px-2 py-1 rounded-md"
@@ -71,7 +121,7 @@ const Body = () => {
         className="px-2 py-1 font-medium text-xl bg-blue-200 rounded-lg mr-5 "
         onClick={() => {
           const filteredRestroData = listOfRestaurants.filter((res) =>
-            res.info.name.toLowerCase().includes(searchText.toLowerCase())
+            res.info.name.toLowerCase().includes(searchText.toLowerCase()),
           );
 
           setFilteredRestro(filteredRestroData);
@@ -85,7 +135,7 @@ const Body = () => {
         className="px-2 py-1 font-medium text-xl bg-gray-200 rounded-lg "
         onClick={() => {
           const filteredList = listOfRestaurants.filter(
-            (rest) => rest.info.avgRating > 4
+            (rest) => rest.info.avgRating > 4,
           );
           setListOfRestaurants(filteredList);
         }}
