@@ -19,7 +19,7 @@ const RestaurantManu = () => {
     resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
       (c) =>
         c.card?.card?.["@type"] ===
-        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory",
     );
 
   console.log("categ", restroCategories);

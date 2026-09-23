@@ -11,7 +11,8 @@ const useRestaurantMenu = (resId) => {
     const loadLiveMenu = async () => {
       try {
         const response = await fetch(MENU_URL + resId);
-        if (!response.ok) throw new Error(`Menu API returned ${response.status}`);
+        if (!response.ok)
+          throw new Error(`Menu API returned ${response.status}`);
 
         const jsonData = await response.json();
         if (jsonData?.data?.cards) setResInfo(jsonData.data);

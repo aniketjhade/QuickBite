@@ -52,15 +52,35 @@ export const localRestaurantMenus = {
       {
         title: "Popular Dishes",
         items: [
-          createItem("airport-biryani", "Chicken Biryani", 260, "Aromatic basmati rice with tender chicken."),
-          createItem("airport-paneer", "Paneer Tikka", 220, "Char-grilled paneer with Indian spices."),
+          createItem(
+            "airport-biryani",
+            "Chicken Biryani",
+            260,
+            "Aromatic basmati rice with tender chicken.",
+          ),
+          createItem(
+            "airport-paneer",
+            "Paneer Tikka",
+            220,
+            "Char-grilled paneer with Indian spices.",
+          ),
         ],
       },
       {
         title: "Main Course",
         items: [
-          createItem("airport-butter-chicken", "Butter Chicken", 280, "Creamy tomato curry with soft chicken."),
-          createItem("airport-naan", "Tandoori Naan", 60, "Fresh naan baked in a tandoor."),
+          createItem(
+            "airport-butter-chicken",
+            "Butter Chicken",
+            280,
+            "Creamy tomato curry with soft chicken.",
+          ),
+          createItem(
+            "airport-naan",
+            "Tandoori Naan",
+            60,
+            "Fresh naan baked in a tandoor.",
+          ),
         ],
       },
     ],
@@ -73,14 +93,29 @@ export const localRestaurantMenus = {
       {
         title: "Pizzas",
         items: [
-          createItem("olio-margherita", "Margherita Pizza", 299, "Classic pizza with tomato, mozzarella and basil."),
-          createItem("olio-farmhouse", "Farmhouse Pizza", 399, "Fresh vegetables with extra cheese."),
+          createItem(
+            "olio-margherita",
+            "Margherita Pizza",
+            299,
+            "Classic pizza with tomato, mozzarella and basil.",
+          ),
+          createItem(
+            "olio-farmhouse",
+            "Farmhouse Pizza",
+            399,
+            "Fresh vegetables with extra cheese.",
+          ),
         ],
       },
       {
         title: "Pastas",
         items: [
-          createItem("olio-alfredo", "Alfredo Pasta", 329, "Creamy penne pasta with herbs."),
+          createItem(
+            "olio-alfredo",
+            "Alfredo Pasta",
+            329,
+            "Creamy penne pasta with herbs.",
+          ),
         ],
       },
     ],
@@ -93,14 +128,29 @@ export const localRestaurantMenus = {
       {
         title: "Signature Subs",
         items: [
-          createItem("subway-paneer", "Paneer Tikka Sub", 249, "Toasted sub with paneer, vegetables and sauces."),
-          createItem("subway-veggie", "Veggie Delite", 199, "Crunchy vegetables in freshly baked bread."),
+          createItem(
+            "subway-paneer",
+            "Paneer Tikka Sub",
+            249,
+            "Toasted sub with paneer, vegetables and sauces.",
+          ),
+          createItem(
+            "subway-veggie",
+            "Veggie Delite",
+            199,
+            "Crunchy vegetables in freshly baked bread.",
+          ),
         ],
       },
       {
         title: "Sides",
         items: [
-          createItem("subway-cookie", "Chocolate Chip Cookie", 69, "Soft baked cookie with chocolate chips."),
+          createItem(
+            "subway-cookie",
+            "Chocolate Chip Cookie",
+            69,
+            "Soft baked cookie with chocolate chips.",
+          ),
         ],
       },
     ],
