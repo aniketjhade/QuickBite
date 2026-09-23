@@ -45,6 +45,28 @@ const fallbackRestaurants = [
   },
 ];
 
+const findRestaurants = (value) => {
+  if (!value || typeof value !== "object") return null;
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const restaurants = findRestaurants(item);
+      if (restaurants?.length) return restaurants;
+    }
+    return null;
+  }
+
+  const restaurants = value?.gridElements?.infoWithStyle?.restaurants;
+  if (Array.isArray(restaurants) && restaurants.length) return restaurants;
+
+  for (const child of Object.values(value)) {
+    const nestedRestaurants = findRestaurants(child);
+    if (nestedRestaurants?.length) return nestedRestaurants;
+  }
+
+  return null;
+};
+
 const Body = () => {
   // listOfRestaurants to get all the restro from Api call
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
@@ -74,11 +96,10 @@ const Body = () => {
       if (!data.ok) throw new Error(`Restaurant API returned ${data.status}`);
 
       const jsonData = await data.json();
-      const restaurants =
-        jsonData?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
-          ?.restaurants;
+      const restaurants = findRestaurants(jsonData?.data);
 
-      if (!restaurants?.length) throw new Error("Restaurant data is unavailable");
+      if (!restaurants?.length)
+        throw new Error("Restaurant data is unavailable");
 
       setListOfRestaurants(restaurants);
       setFilteredRestro(restaurants);
@@ -105,7 +126,8 @@ const Body = () => {
     <div className="">
       {hasApiError && (
         <p className="m-4 rounded bg-yellow-100 p-3 text-yellow-900">
-          Live restaurant data is unavailable, so QuickBite is showing sample restaurants.
+          Live restaurant data is unavailable, so QuickBite is showing sample
+          restaurants.
         </p>
       )}
       <input
