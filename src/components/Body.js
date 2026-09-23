@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import useShowOnlineStatus from "../utils/useShowOnlineStatus";
 import UserContext from "../utils/UserContext";
 import myNameContext from "../utils/myNameContext";
+import { RESTAURANT_API_URL } from "../utils/constant";
 
 const fallbackRestaurants = [
   {
@@ -91,7 +92,7 @@ const Body = () => {
   const apiData = async () => {
     try {
       const data = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.1458004&lng=79.0881546&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
+        RESTAURANT_API_URL,
       );
       if (!data.ok) throw new Error(`Restaurant API returned ${data.status}`);
 
